@@ -3,29 +3,30 @@
 #include <stdlib.h>
 #include <assert.h>
 
+
 const int MAX_STR_LEN = 100;
 
-void remove_newline_symbol( char *str);
-void clear_input();
-void print_string_array(    char **array, size_t arr_len);
 
-char** merge_sort_strings                   (char **array,                            size_t arr_len,  size_t max_str_len, 
-                                                ssize_t (*comparator_func)(void *a, void *b));
+void remove_newline_symbol                      (char *str);
+void clear_input                                ();
+void print_string_array                         (char **array, size_t arr_len);
 
-void merge_sort_strings_splitting_in_half   (char **array, char **left, char **right, size_t left_len, size_t right_len);
+char** merge_sort_strings                       (char **array, size_t arr_len,  size_t max_str_len, 
+                                                    ssize_t (*comparator_func)(void *a, void *b));
 
-void merge_sort_strings_merging             (char **array, char **left, char **right, size_t left_len, size_t right_len, 
-                                                ssize_t (*comparator_func)(void *a, void *b));
+void merge_sort_strings_splitting_in_half       (char **array, char **left, char **right, size_t left_len, size_t right_len);
 
-ssize_t compare_strings_increasingly          (char *str1,   char *str2);
-ssize_t compare_strings_decreasingly          (char *str1,   char *str2);
-ssize_t compare_strings_by_length_increasingly(char *str1,   char *str2);
-ssize_t compare_strings_strcmp                (char *str1,   char *str2);
+void merge_sort_strings_merging                 (char **array, char **left, char **right, size_t left_len, size_t right_len, 
+                                                    ssize_t (*comparator_func)(void *a, void *b));
+
+ssize_t compare_strings_increasingly            (char *str1,   char *str2);
+ssize_t compare_strings_decreasingly            (char *str1,   char *str2);
+ssize_t compare_strings_by_length_increasingly  (char *str1,   char *str2);
+ssize_t compare_strings_strcmp                  (char *str1,   char *str2);
 
 
 
 int main() {
-
     size_t strings_count = 0;
 
     scanf("%zu", &strings_count);
@@ -172,6 +173,7 @@ void print_string_array(char **array, size_t arr_len) {
     for (size_t i = 0; i < arr_len; ++i) {
         printf("[%s] ", array[i]);
     }
+    
     printf("\n");
 }
 
