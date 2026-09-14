@@ -29,6 +29,8 @@ ssize_t compare_strings_strcmp                  (char *str1,   char *str2);
 int main() {
     size_t strings_count = 0;
 
+    printf("Enter amount of strings to sort: ");
+
     scanf("%zu", &strings_count);
     clear_input();
 
@@ -42,15 +44,19 @@ int main() {
     }
 
     merge_sort_strings(array, strings_count, MAX_STR_LEN, (ssize_t (*)(void *, void*))compare_strings_strcmp);
+    printf("Strcmp:             ");
     print_string_array(array, strings_count);
 
     merge_sort_strings(array, strings_count, MAX_STR_LEN, (ssize_t (*)(void *, void*))compare_strings_increasingly);
+    printf("Increasing order:   ");
     print_string_array(array, strings_count);
 
     merge_sort_strings(array, strings_count, MAX_STR_LEN, (ssize_t (*)(void *, void*))compare_strings_decreasingly);
+    printf("Reverse order:      ");
     print_string_array(array, strings_count);
 
     merge_sort_strings(array, strings_count, MAX_STR_LEN, (ssize_t (*)(void *, void*))compare_strings_by_length_increasingly);
+    printf("By length:          ");
     print_string_array(array, strings_count);
 
 
@@ -173,7 +179,7 @@ void print_string_array(char **array, size_t arr_len) {
     for (size_t i = 0; i < arr_len; ++i) {
         printf("[%s] ", array[i]);
     }
-    
+
     printf("\n");
 }
 
