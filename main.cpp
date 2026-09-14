@@ -70,7 +70,7 @@ int main() {
 
 char** merge_sort_strings(char **array, size_t arr_len, size_t max_str_len, ssize_t (*comparator_func)(void *a, void *b)) {
 
-    if (arr_len == 1)
+    if (arr_len <= 1)
         return array;
 
     size_t left_len = arr_len / 2 + arr_len % 2;
@@ -171,7 +171,7 @@ ssize_t compare_strings_decreasingly(char *str1, char *str2) {
 
 
 ssize_t compare_strings_by_length_increasingly(char *str1, char *str2) {
-    return strlen(str1) - strlen(str2);
+    return (ssize_t) strlen(str1) - (ssize_t) strlen(str2);
 }
 
 
