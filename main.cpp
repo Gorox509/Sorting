@@ -2,14 +2,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <ctype.h>
 
 
 const int MAX_STR_LEN = 100;
+const int MAX_BUF_SIZE = 10000;
 
 
 void remove_newline_symbol                      (char *str);
 void clear_input                                ();
-void print_string_array                         (char **array, size_t arr_len);
+void print_string_array_with_message            (char **array, size_t arr_len, const char *msg_str);
+void print_string_array_with_message_to_file    (FILE *fp, 
+                                                 char **array, size_t arr_len, const char *msg_str);
+void print_string_array_no_message_to_file      (FILE *fp, 
+                                                 char **array, size_t arr_len);
+
+void print_divisor_to_file                      (FILE *fp);
 
 char** merge_sort_strings                       (char **array, size_t arr_len,  size_t max_str_len, 
                                                     ssize_t (*comparator_func)(void *a, void *b));
@@ -23,12 +31,17 @@ ssize_t compare_strings_increasingly            (char *str1,   char *str2);
 ssize_t compare_strings_decreasingly            (char *str1,   char *str2);
 ssize_t compare_strings_by_length_increasingly  (char *str1,   char *str2);
 ssize_t compare_strings_strcmp                  (char *str1,   char *str2);
+ssize_t compare_strings_from_end                (char *str1,   char *str2);
+
+size_t read_string_from_file_to_buffer          (FILE *fp,     char *buffer, char **buffer_ptr);
+size_t read_file_to_buffer                      (FILE *fp,     char *buffer);
+size_t read_buffer_to_array                     (char **array, char *buffer, size_t buf_len);
 
 
 
 int main() {
     size_t strings_count = 0;
-
+    /*
     printf("Enter amount of strings to sort: ");
 
     scanf("%zu", &strings_count);
@@ -42,27 +55,56 @@ int main() {
         fgets(array[i], MAX_STR_LEN, stdin);
         remove_newline_symbol(array[i]);
     }
+    */
+    
+    FILE *fp = fopen("original.txt", "r");
 
-    merge_sort_strings(array, strings_count, MAX_STR_LEN, (ssize_t (*)(void *, void*))compare_strings_strcmp);
-    printf("Strcmp:             ");
-    print_string_array(array, strings_count);
+    char **array = (char**) calloc(MAX_BUF_SIZE, sizeof(char*));
 
-    merge_sort_strings(array, strings_count, MAX_STR_LEN, (ssize_t (*)(void *, void*))compare_strings_increasingly);
-    printf("Increasing order:   ");
-    print_string_array(array, strings_count);
+    char *buffer = (char *) calloc(MAX_STR_LEN * MAX_BUF_SIZE, sizeof(char));
+    char **buffer_start = &buffer;
 
-    merge_sort_strings(array, strings_count, MAX_STR_LEN, (ssize_t (*)(void *, void*))compare_strings_decreasingly);
-    printf("Reverse order:      ");
-    print_string_array(array, strings_count);
+    size_t buffer_len = read_file_to_buffer(fp, buffer);
 
-    merge_sort_strings(array, strings_count, MAX_STR_LEN, (ssize_t (*)(void *, void*))compare_strings_by_length_increasingly);
-    printf("By length:          ");
-    print_string_array(array, strings_count);
+    fclose(fp);
+
+    buffer = *buffer_start;
+
+    strings_count = read_buffer_to_array(array, buffer, buffer_len);
+
+    char **array_old = (char**) calloc(strings_count, sizeof(char*));
+    memcpy(array_old, array, strings_count * sizeof(char*));
+
+    FILE *fp_out = fopen("output.txt", "w");
+
+    merge_sort_strings(array, strings_count, MAX_STR_LEN, (ssize_t (*)(void*, void*))compare_strings_increasingly);
+    print_string_array_no_message_to_file(fp, array, strings_count);
+    print_divisor_to_file(fp);
+
+    merge_sort_strings(array, strings_count, MAX_STR_LEN * sizeof(char), (ssize_t (*)(void*, void*))compare_strings_from_end); // TODO: to qsort
+    print_string_array_no_message_to_file(fp, array, strings_count);
+    print_divisor_to_file(fp);
+
+    /*
+    merge_sort_strings(array, strings_count, MAX_STR_LEN, (ssize_t (*)(void*, void*))compare_strings_increasingly);
+    print_string_array_with_message(array, strings_count, "Alphabetic order:");
+
+    merge_sort_strings(array, strings_count, MAX_STR_LEN, (ssize_t (*)(void*, void*))compare_strings_decreasingly);
+    print_string_array_with_message(array, strings_count, "Reverse alphabetic order:");
+
+    merge_sort_strings(array, strings_count, MAX_STR_LEN, (ssize_t (*)(void*, void*))compare_strings_by_length_increasingly);
+    print_string_array_with_message(array, strings_count, "By length:");
+    */
+    print_string_array_no_message_to_file(fp, array_old, strings_count);
+
+    fclose(fp_out);
 
 
     for (size_t i = 0; i < strings_count; ++i)
         free(array[i]);
     free(array);
+
+    free(array_old);
 
     return 0;
 }
@@ -175,15 +217,106 @@ ssize_t compare_strings_by_length_increasingly(char *str1, char *str2) {
 }
 
 
-void print_string_array(char **array, size_t arr_len) {
-    for (size_t i = 0; i < arr_len; ++i) {
-        printf("[%s] ", array[i]);
-    }
-
-    printf("\n");
+void print_string_array_with_message(char **array, size_t arr_len, const char *msg_str) {
+    print_string_array_with_message_to_file(stdout, array, arr_len, msg_str);
 }
 
 
-ssize_t compare_strings_strcmp(char *str1, char *str2) {
+ssize_t compare_strings_strcmp(char *str1, char *str2) { // for testing custom comparator
     return (ssize_t) strcmp(str1, str2);
+}
+
+
+void print_string_array_with_message_to_file(FILE *fp, char **array, size_t arr_len, const char *msg_str) {
+    fprintf(fp, "%s\n", msg_str);
+
+    print_string_array_no_message_to_file(fp, array, arr_len);
+}
+
+
+void print_string_array_no_message_to_file(FILE *fp, char **array, size_t arr_len) {
+    for (size_t i = 0; i < arr_len; ++i) {
+        fprintf(fp, "[%s]\n", array[i]);
+    }
+
+    fprintf(fp, "\n");
+}
+
+
+void print_divisor_to_file(FILE *fp) {
+    fprintf(fp, "\n==========================================\n\n");
+}
+
+
+ssize_t compare_strings_from_end(char *str1, char *str2) {
+    ssize_t idx1 = 0, idx2 = 0;
+
+    while (str1[idx1++] != '\0');
+    while (str2[idx2++] != '\0');
+
+    idx1 -= 2;
+    idx2 -= 2;
+
+    while (idx1 >= 0 && idx2 >= 0 && str1[idx1--] == str2[idx2--]);
+
+    return (ssize_t) str1[idx1 + 1] - (ssize_t) str2[idx2 + 1];
+}
+
+size_t read_file_to_buffer(FILE *fp, char *buffer) {
+    size_t n_read = 0;
+    char **buffer_ptr = &buffer;
+
+    while (!feof(fp)) {
+        n_read += read_string_from_file_to_buffer(fp, buffer, buffer_ptr);
+    }
+    return n_read;
+}
+
+
+size_t read_string_from_file_to_buffer(FILE *fp, char *buffer, char **buffer_ptr) {
+    char ch = 1;
+
+    size_t idx1 = 0, idx2 = 0;
+
+    while (isspace(ch)) {
+        ch = (char) fgetc(fp);
+        ++idx1;
+    }
+
+    while (!isspace(ch) && ch != '\0' && ch != EOF) {
+        ch = (char) fgetc(fp);
+
+        if (isalpha(ch)) {
+            buffer[idx2] = (char) tolower(ch);
+            ++idx2;
+        }
+        ++idx1;
+    }
+
+    buffer[idx2++] = '\0';
+
+
+
+    *buffer_ptr += idx2;
+    fp = (FILE*) ((char*)fp + idx1 + 1);
+    return idx2;
+}
+
+
+size_t read_buffer_to_array(char **array, char *buffer, size_t buf_len) {
+    size_t arr_idx = 0;
+
+    for (size_t i = 0; i < buf_len; ) {
+        array[arr_idx] = (char*) calloc(MAX_STR_LEN, sizeof(char));
+
+        size_t j = 0;
+        while (buffer[i] != '\0') {
+            array[arr_idx][j] = buffer[i];
+            ++i;
+            ++j;
+        }
+
+        array[arr_idx++][j] = buffer[i++];
+    }
+    return arr_idx - 1;
 }
