@@ -1,4 +1,3 @@
-[]
 [a]
 [a]
 [a]
@@ -23,7 +22,7 @@
 [god]
 [good]
 [gravely]
-[halfalive]
+[half-alive]
 [has]
 [he]
 [he]
@@ -75,11 +74,11 @@
 [when]
 [when]
 [will]
+[you]
 
 
 ==========================================
 
-[]
 [a]
 [a]
 [a]
@@ -102,7 +101,7 @@
 [one]
 [bore]
 [base]
-[halfalive]
+[half-alive]
 [serve]
 [nothing]
 [stirring]
@@ -149,6 +148,7 @@
 [most]
 [adjust]
 [but]
+[you]
 [day]
 [away]
 [by]
@@ -216,7 +216,7 @@
 [to]
 [entertain]
 [one]
-[halfalive]
+[half-alive]
 [adjust]
 [for]
 [him]
@@ -228,7 +228,6 @@
 [his]
 [medicine]
 [sigh]
-[]
 [and]
 [think]
 [inwardly]
@@ -237,4 +236,5 @@
 [the]
 [devil]
 [take]
+[you]
 
