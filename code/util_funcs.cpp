@@ -109,40 +109,40 @@ ssize_t read_file_to_buffer_lines(FILE *fp, char *buffer) {
 
     while (!feof(fp)) {
 
-        size_t idx1 = 0, idx2 = 0;
+        size_t idx_read_bufferized = 0, idx_true_buffer = 0;
 
         size_t n_fread = fread(buffer_for_buffer, sizeof(char), MAX_STR_LEN, fp);
 
         char ch = 0;
 
-        while (ch != EOF && idx1 < n_fread) {
-            ch = buffer_for_buffer[idx1++];
+        while (ch != EOF && idx_read_bufferized < n_fread) {
+            ch = buffer_for_buffer[idx_read_bufferized++];
 
             if (isalpha(ch) || (ch == '-' && !previous_is_space)) {
                 previous_is_space = 0;
                 previous_is_newline = 0;
-                buffer[n_read + idx2++] = (char) tolower(ch);
+                buffer[n_read + idx_true_buffer++] = (char) tolower(ch);
             }
 
             if (ch == ' ' && !previous_is_space) {
                 previous_is_space = 1;
                 previous_is_newline = 0;
-                buffer[n_read + idx2++] = ch;
+                buffer[n_read + idx_true_buffer++] = ch;
             }
 
             if (ch == '\n' && !previous_is_newline) {
                 if (previous_is_space)
-                    buffer[n_read + --idx2] = '\0';
+                    buffer[n_read + --idx_true_buffer] = '\0';
 
                 else
-                    buffer[n_read + idx2++] = '\0';
+                    buffer[n_read + idx_true_buffer++] = '\0';
 
                 previous_is_space = 1;
                 previous_is_newline = 1;
             }
         }
 
-        n_read += idx2;
+        n_read += idx_true_buffer;
     }
     buffer[++n_read] = '\0';
     free(buffer_for_buffer);
