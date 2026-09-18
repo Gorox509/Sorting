@@ -8,7 +8,7 @@ void remove_newline_symbol(char *str) {
     assert(str != NULL);
 
     size_t iter = 0;
-    
+
     while (str[iter] != '\0') {
         if (str[iter] == '\n') {
             str[iter] = '\0';
@@ -31,7 +31,7 @@ void print_string_array_with_message_to_file(FILE *fp, char **array, size_t arr_
 
     assert(fp != NULL);
     assert(array != NULL);
-    
+
     if (msg_str != NULL)
         fprintf(fp, "%s\n", msg_str);
 
@@ -58,15 +58,15 @@ ssize_t read_file_to_buffer(FILE *fp, char *buffer) {
 
     char *buffer_for_buffer = (char*) calloc(MAX_STR_LEN, sizeof(char));
 
-    if (buffer_for_buffer == NULL) 
+    if (buffer_for_buffer == NULL)
         return -1;
 
-    size_t n_read = 0; 
+    size_t n_read = 0;
+    bool previous_is_space = 0;
 
     while (!feof(fp)) {
 
         size_t idx1 = 0, idx2 = 0;
-        bool previous_is_space = 0;
 
         size_t n_fread = fread(buffer_for_buffer, sizeof(char), MAX_STR_LEN, fp);
 
@@ -90,7 +90,7 @@ ssize_t read_file_to_buffer(FILE *fp, char *buffer) {
     buffer[++n_read] = '\0';
     free(buffer_for_buffer);
 
-    return n_read + 1;
+    return (ssize_t) n_read + 1;
 }
 
 
@@ -123,7 +123,7 @@ void destruct_array_of_strings(char **array, size_t strings_count) {
     assert(array != NULL);
 
     for (size_t i = 0; i < strings_count; ++i)
-        free(array[i]); 
+        free(array[i]);
 
     free(array);
 }

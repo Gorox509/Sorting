@@ -11,7 +11,7 @@
 int main() {
     size_t strings_count = 0;
 
-    FILE *fp = fopen("original.txt", "r");
+    FILE *fp = fopen("onegin.txt", "r");
 
     char **array = (char**) calloc(MAX_BUF_SIZE, sizeof(char*));
 
@@ -21,7 +21,7 @@ int main() {
 
     fclose(fp);
 
-    strings_count = read_buffer_to_array(array, buffer, buffer_len);
+    strings_count = read_buffer_to_array(array, buffer, (size_t) buffer_len);
 
     free(buffer);
 
@@ -31,14 +31,14 @@ int main() {
     FILE *fp_out = fopen("output.txt", "w");
 
     merge_sort_strings(array, strings_count, MAX_STR_LEN, (ssize_t (*)(void*, void*))compare_strings_increasingly);
-    print_string_array_with_message_to_file(fp, array, strings_count, NULL);
-    print_divisor_to_file(fp);
+    print_string_array_with_message_to_file(fp_out, array, strings_count, NULL);
+    print_divisor_to_file(fp_out);
 
     merge_sort_strings(array, strings_count, MAX_STR_LEN * sizeof(char), (ssize_t (*)(void*, void*))compare_strings_from_end); // TODO: to qsort
-    print_string_array_with_message_to_file(fp, array, strings_count, NULL);
-    print_divisor_to_file(fp);
+    print_string_array_with_message_to_file(fp_out, array, strings_count, NULL);
+    print_divisor_to_file(fp_out);
 
-    print_string_array_with_message_to_file(fp, array_old, strings_count, NULL);
+    print_string_array_with_message_to_file(fp_out, array_old, strings_count, NULL);
 
     fclose(fp_out);
 
