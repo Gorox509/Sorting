@@ -9,26 +9,27 @@
 
 
 int main() {
+
     size_t strings_count = 0;
 
-    FILE *fp = fopen("onegin.txt", "r");
+    FILE *fp = fopen("onegin.txt", "rb");
 
     char **array = (char**) calloc(MAX_BUF_SIZE, sizeof(char*));
 
     char *buffer = (char*)  calloc(MAX_STR_LEN * MAX_BUF_SIZE, sizeof(char));
 
-    ssize_t buffer_len = read_file_to_buffer(fp, buffer);
+    //ssize_t buffer_len = read_file_to_buffer(fp, buffer);
+    ssize_t buffer_len = read_file_to_buffer_lines(fp, buffer);
 
     fclose(fp);
 
+    //strings_count = read_buffer_to_array(array, buffer, (size_t) buffer_len);
     strings_count = read_buffer_to_array(array, buffer, (size_t) buffer_len);
-
-    free(buffer);
 
     char **array_old = (char**) calloc(strings_count, sizeof(char*));
     memcpy(array_old, array, strings_count * sizeof(char*));
 
-    FILE *fp_out = fopen("output.txt", "w");
+    FILE *fp_out = fopen("output.txt", "wb");
 
     merge_sort_strings(array, strings_count, MAX_STR_LEN, (ssize_t (*)(void*, void*))compare_strings_increasingly);
     print_string_array_with_message_to_file(fp_out, array, strings_count, NULL);
@@ -42,9 +43,8 @@ int main() {
 
     fclose(fp_out);
 
-
-    destruct_array_of_strings(array, strings_count);
-
+    free(buffer);
+    free(array);
     free(array_old);
 
     return 0;

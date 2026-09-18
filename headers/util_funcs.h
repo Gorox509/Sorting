@@ -12,7 +12,8 @@ void print_string_array_with_message_to_file    (FILE *fp,                      
 
 void print_divisor_to_file                      (FILE *fp);
 
-ssize_t read_file_to_buffer                      (FILE *fp,     char *buffer);
+ssize_t read_file_to_buffer                     (FILE *fp,     char *buffer);
 size_t read_buffer_to_array                     (char **array, char *buffer, size_t buf_len);
+ssize_t read_file_to_buffer_lines               (FILE *fp,     char *buffer);
 
 #endif
