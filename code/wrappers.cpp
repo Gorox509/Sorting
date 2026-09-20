@@ -1,5 +1,5 @@
-#include "../headers/definitions.h"
-#include "../headers/wrappers.h"
+#include "../headers/definitions.hpp"
+#include "../headers/wrappers.hpp"
 
 void *safe_calloc(size_t _nmemb, size_t _size) {
     void *ptr = calloc(_nmemb, _size);

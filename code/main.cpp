@@ -1,8 +1,8 @@
-#include "../headers/definitions.h"
-#include "../headers/comparators.h"
-#include "../headers/sorting.h"
-#include "../headers/util_funcs.h"
-#include "../headers/wrappers.h"
+#include "../headers/definitions.hpp"
+#include "../headers/comparators.hpp"
+#include "../headers/sorting.hpp"
+#include "../headers/util_funcs.hpp"
+#include "../headers/wrappers.hpp"
 
 #include "util_funcs.cpp"
 #include "sorting.cpp"
@@ -12,7 +12,7 @@
 
 
 int main() {
-
+    // я хз как main разбивать по функциям, такое ощущение что все строчки кода про разное
     size_t strings_count = 0;
     char filename[] = "onegin.txt";
 
@@ -21,9 +21,9 @@ int main() {
     __off_t file_size = text_stat.st_size;
     __blksize_t optimal_bulk_size = text_stat.st_blksize;
 
-    FILE *fp = safe_fopen(filename, "rb"); //TODO: check null - done
-
     char *buffer = (char*) safe_calloc((size_t) file_size + 1, sizeof(char)); // +1 for \0 at the end
+
+    FILE *fp = safe_fopen(filename, "rb"); //TODO: check null - done
 
     strings_count = read_lines_from_file_to_buffer(fp, buffer, optimal_bulk_size); //TODO: temp buf?? - ya eblan sry (done)
 
@@ -44,6 +44,7 @@ int main() {
     print_divisor_to_file(fp_out);
 
     fprintf(fp_out, "%s", buffer);
+
 
     fclose(fp_out);
 

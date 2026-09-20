@@ -1,6 +1,5 @@
-#include "../headers/definitions.h"
-#include "../headers/util_funcs.h"
-
+#include "../headers/definitions.hpp"
+#include "../headers/util_funcs.hpp"
 
 
 void remove_newline_symbol(char *str) {
@@ -102,6 +101,7 @@ size_t assign_ptrs_from_buffer_to_strings_array(char **strings_ptrs_array, char 
 
     return idx_array;
 }
+
 
 void destruct_array_of_strings(char **array, size_t strings_count) {
 

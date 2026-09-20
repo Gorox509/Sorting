@@ -1,5 +1,5 @@
-#include "../headers/definitions.h"
-#include "../headers/sorting.h"
+#include "../headers/definitions.hpp"
+#include "../headers/sorting.hpp"
 
 
 char** merge_sort_strings(char **array, size_t arr_len, size_t max_str_len, ssize_t (*comparator_func)(void *a, void *b)) {

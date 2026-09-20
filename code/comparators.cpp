@@ -1,5 +1,6 @@
-#include "../headers/definitions.h"
-#include "../headers/comparators.h"
+#include "../headers/definitions.hpp"
+#include "../headers/comparators.hpp"
+
 
 ssize_t compare_strings_increasingly(char *str1, char *str2) { //TODO: это тоже можно 1 функцией сделать - done
 
