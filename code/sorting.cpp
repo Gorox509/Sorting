@@ -13,12 +13,8 @@ char** merge_sort_strings(char **array, size_t arr_len, size_t max_str_len, ssiz
     size_t left_len = arr_len / 2 + arr_len % 2;
     size_t right_len = arr_len / 2;
 
-    char **left  = (char**) calloc(left_len, sizeof(char*)); //TODO: что если каллок не найдет места?? -- проверка
-    char **right = (char**) calloc(right_len, sizeof(char*));
-
-    if (left == NULL || right == NULL) {
-        return NULL;
-    }
+    char **left  = (char**) safe_calloc(left_len, sizeof(char*)); //TODO: что если каллок не найдет места?? -- done with wrapper
+    char **right = (char**) safe_calloc(right_len, sizeof(char*));
 
     merge_sort_strings_splitting_in_half(array, left, right, left_len, right_len);
 

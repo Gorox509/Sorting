@@ -2,50 +2,53 @@
 #include "../headers/comparators.h"
 #include "../headers/sorting.h"
 #include "../headers/util_funcs.h"
+#include "../headers/wrappers.h"
 
 #include "util_funcs.cpp"
 #include "sorting.cpp"
 #include "comparators.cpp"
+#include "wrappers.cpp"
+
 
 
 int main() {
 
     size_t strings_count = 0;
+    char filename[] = "onegin.txt";
 
-    FILE *fp = fopen("onegin.txt", "rb");
+    struct stat text_stat = {};
+    safe_stat(filename, &text_stat); //TODO: function - done
+    __off_t file_size = text_stat.st_size;
+    __blksize_t optimal_bulk_size = text_stat.st_blksize;
 
-    char **array = (char**) calloc(MAX_BUF_SIZE, sizeof(char*));
+    FILE *fp = safe_fopen(filename, "rb"); //TODO: check null - done
 
-    char *buffer = (char*)  calloc(MAX_STR_LEN * MAX_BUF_SIZE, sizeof(char));
+    char *buffer = (char*) safe_calloc((size_t) file_size + 1, sizeof(char)); // +1 for \0 at the end
 
-    //ssize_t buffer_len = read_file_to_buffer(fp, buffer);
-    ssize_t buffer_len = read_file_to_buffer_lines(fp, buffer);
+    strings_count = read_lines_from_file_to_buffer(fp, buffer, optimal_bulk_size); //TODO: temp buf?? - ya eblan sry (done)
+
+    char **strings_ptrs_array = (char**)  safe_calloc(strings_count, sizeof(char*));
 
     fclose(fp);
 
-    //strings_count = read_buffer_to_array(array, buffer, (size_t) buffer_len);
-    strings_count = read_buffer_to_array(array, buffer, (size_t) buffer_len);
+    assign_ptrs_from_buffer_to_strings_array(strings_ptrs_array, buffer, (size_t) file_size + 1);
 
-    char **array_old = (char**) calloc(strings_count, sizeof(char*));
-    memcpy(array_old, array, strings_count * sizeof(char*));
+    FILE *fp_out = safe_fopen("output.txt", "wb");
 
-    FILE *fp_out = fopen("output.txt", "wb");
-
-    merge_sort_strings(array, strings_count, MAX_STR_LEN, (ssize_t (*)(void*, void*))compare_strings_increasingly);
-    print_string_array_with_message_to_file(fp_out, array, strings_count, NULL);
+    merge_sort_strings(strings_ptrs_array, strings_count, MAX_STR_LEN, (ssize_t (*)(void*, void*))compare_strings_increasingly);
+    print_string_array_with_message_to_file(fp_out, strings_ptrs_array, strings_count, NULL);
     print_divisor_to_file(fp_out);
 
-    merge_sort_strings(array, strings_count, MAX_STR_LEN * sizeof(char), (ssize_t (*)(void*, void*))compare_strings_from_end); // TODO: to qsort
-    print_string_array_with_message_to_file(fp_out, array, strings_count, NULL);
+    merge_sort_strings(strings_ptrs_array, strings_count, MAX_STR_LEN, (ssize_t (*)(void*, void*))compare_strings_from_end); // TODO: to qsort
+    print_string_array_with_message_to_file(fp_out, strings_ptrs_array, strings_count, NULL);
     print_divisor_to_file(fp_out);
 
-    print_string_array_with_message_to_file(fp_out, array_old, strings_count, NULL);
+    fprintf(fp_out, "%s", buffer);
 
     fclose(fp_out);
 
     free(buffer);
-    free(array);
-    free(array_old);
+    free(strings_ptrs_array);
 
     return 0;
 }
