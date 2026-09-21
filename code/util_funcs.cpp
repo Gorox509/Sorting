@@ -42,7 +42,7 @@ void print_string_array_with_message_to_file(FILE *fp, char **array, size_t arr_
 }
 
 
-void print_string_before_newline(FILE *fp, char *str) {
+void print_string_before_newline(FILE *fp, const char *str) {
     size_t idx = 0;
 
     while (str[idx] != '\n' && str[idx] != '\0')

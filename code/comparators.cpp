@@ -3,7 +3,7 @@
 #include "../headers/comparators.hpp"
 
 
-ssize_t compare_strings_increasingly(char *str1, char *str2) { //TODO: это тоже можно 1 функцией сделать - done
+int compare_strings_increasingly(const char *str1, const char *str2) { //TODO: это тоже можно 1 функцией сделать - done
 
     assert(str1 != NULL);
     assert(str2 != NULL);
@@ -32,11 +32,11 @@ ssize_t compare_strings_increasingly(char *str1, char *str2) { //TODO: это т
         ++idx1;
         ++idx2;
     }
-    return (ssize_t) tolower(str1[idx1]) - tolower(str2[idx2]);
+    return tolower(str1[idx1]) - tolower(str2[idx2]);
 }
 
 
-ssize_t compare_strings_decreasingly(char *str1, char *str2) {
+int compare_strings_decreasingly(const char *str1, const char *str2) {
 
     assert(str1 != NULL);
     assert(str2 != NULL);
@@ -45,7 +45,7 @@ ssize_t compare_strings_decreasingly(char *str1, char *str2) {
 }
 
 
-ssize_t compare_strings_from_end(char *str1, char *str2) {
+int compare_strings_from_end(const char *str1, const char *str2) {
 
     assert(str1 != NULL);
     assert(str2 != NULL);
@@ -66,9 +66,9 @@ ssize_t compare_strings_from_end(char *str1, char *str2) {
         bool wrong_symbol_1 = 0;
         bool wrong_symbol_2 = 0;
 
-        if (!isalpha(str1[idx1]) && str1[idx1])
+        if (!isalpha(str1[idx1]) && str1[idx1] != ' ')
             wrong_symbol_1 = 1;
-        if (!isalpha(str2[idx2]) && str2[idx2])
+        if (!isalpha(str2[idx2]) && str1[idx1] != ' ')
             wrong_symbol_2 = 1;
 
         if (wrong_symbol_1)
@@ -82,5 +82,5 @@ ssize_t compare_strings_from_end(char *str1, char *str2) {
             break;
     }
 
-    return (ssize_t) tolower(str1[idx1 + 1]) - (ssize_t) tolower(str2[idx2 + 1]);
+    return tolower(str1[idx1 + 1]) - tolower(str2[idx2 + 1]);
 }

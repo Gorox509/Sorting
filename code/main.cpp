@@ -8,6 +8,7 @@
 #include "sorting.cpp"
 #include "comparators.cpp"
 #include "wrappers.cpp"
+#include <cstdlib>
 
 
 
@@ -27,7 +28,7 @@ int main() {
 
     strings_count = read_lines_from_file_to_buffer(fp, buffer, optimal_block_size); //TODO: temp buf?? - done
 
-    char **strings_ptrs_array = (char**)  safe_calloc(strings_count, sizeof(char*));
+    char **strings_ptrs_array = (char**) safe_calloc(strings_count, sizeof(char*));
 
     fclose(fp);
 
@@ -35,11 +36,11 @@ int main() {
 
     FILE *fp_out = safe_fopen("output.txt", "wb");
 
-    merge_sort_strings(strings_ptrs_array, strings_count, MAX_STR_LEN, (ssize_t (*)(void*, void*))compare_strings_increasingly);
+    merge_sort_strings(strings_ptrs_array, strings_count, MAX_STR_LEN, (int (*)(const void*, const void*))compare_strings_increasingly);
     print_string_array_with_message_to_file(fp_out, strings_ptrs_array, strings_count, NULL);
     print_divisor_to_file(fp_out);
 
-    merge_sort_strings(strings_ptrs_array, strings_count, MAX_STR_LEN, (ssize_t (*)(void*, void*))compare_strings_from_end); // TODO: to qsort
+    merge_sort_strings(strings_ptrs_array, strings_count, MAX_STR_LEN, (int (*)(const void*, const void*))compare_strings_from_end); // TODO: to qsort
     print_string_array_with_message_to_file(fp_out, strings_ptrs_array, strings_count, NULL);
     print_divisor_to_file(fp_out);
 
