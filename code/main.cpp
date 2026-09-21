@@ -19,13 +19,13 @@ int main() {
     struct stat text_stat = {};
     safe_stat(filename, &text_stat); //TODO: function - done
     __off_t file_size = text_stat.st_size;
-    __blksize_t optimal_bulk_size = text_stat.st_blksize;
+    __blksize_t optimal_block_size = text_stat.st_blksize;
 
     char *buffer = (char*) safe_calloc((size_t) file_size + 1, sizeof(char)); // +1 for \0 at the end
 
     FILE *fp = safe_fopen(filename, "rb"); //TODO: check null - done
 
-    strings_count = read_lines_from_file_to_buffer(fp, buffer, optimal_bulk_size); //TODO: temp buf?? - ya eblan sry (done)
+    strings_count = read_lines_from_file_to_buffer(fp, buffer, optimal_block_size); //TODO: temp buf?? - done
 
     char **strings_ptrs_array = (char**)  safe_calloc(strings_count, sizeof(char*));
 

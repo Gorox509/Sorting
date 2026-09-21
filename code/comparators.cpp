@@ -1,4 +1,5 @@
 #include "../headers/definitions.hpp"
+#include <cctype>
 #include "../headers/comparators.hpp"
 
 
@@ -25,13 +26,13 @@ ssize_t compare_strings_increasingly(char *str1, char *str2) { //TODO: это т
         if (wrong_symbol_1 || wrong_symbol_2)
             continue;
 
-        if (str1[idx1] != str2[idx2])
+        if (tolower(str1[idx1]) != tolower(str2[idx2]))
             break;
 
         ++idx1;
         ++idx2;
     }
-    return (ssize_t) str1[idx1] - str2[idx2];
+    return (ssize_t) tolower(str1[idx1]) - tolower(str2[idx2]);
 }
 
 
@@ -77,9 +78,9 @@ ssize_t compare_strings_from_end(char *str1, char *str2) {
         if (wrong_symbol_1 || wrong_symbol_2)
             continue;
 
-        if (str1[idx1--] != str2[idx2--])
+        if (tolower(str1[idx1--]) != tolower(str2[idx2--]))
             break;
     }
 
-    return (ssize_t) str1[idx1 + 1] - (ssize_t) str2[idx2 + 1];
+    return (ssize_t) tolower(str1[idx1 + 1]) - (ssize_t) tolower(str2[idx2 + 1]);
 }
