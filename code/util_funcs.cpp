@@ -26,16 +26,16 @@ void clear_input() {
 }
 
 
-void print_string_array_with_message_to_file(FILE *fp, char **array, size_t arr_len, const char *msg_str) {
+void print_string_array_with_message_to_file(FILE *fp, struct string_ptr_array_structure str_ptrs_arr, const char *msg_str) {
 
     assert(fp != NULL);
-    assert(array != NULL);
+    assert(str_ptrs_arr.array != NULL);
 
     if (msg_str != NULL)
         fprintf(fp, "%s\n", msg_str);
 
-    for (size_t i = 0; i < arr_len; ++i) {
-        print_string_before_newline(fp, array[i]);
+    for (size_t i = 0; i < str_ptrs_arr.len; ++i) {
+        print_string_before_newline(fp, str_ptrs_arr.array[i]);
     }
 
     fprintf(fp, "\n");

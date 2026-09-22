@@ -35,17 +35,18 @@ int main(int argc, char *argv[]) {
     strings_count = read_lines_from_file_to_buffer(fp, buffer + 1, optimal_block_size); //TODO: temp buf?? - done
     fclose(fp);
 
-    char **strings_ptrs_array = (char**) safe_calloc(strings_count, sizeof(char*));
-    assign_ptrs_from_buffer_to_strings_array(strings_ptrs_array, buffer, (size_t) file_size + 2);
+    struct string_ptr_array_structure str_ptrs_arr = {.len = strings_count};
+    str_ptrs_arr.array = (char**) safe_calloc(strings_count, sizeof(char*));
+    assign_ptrs_from_buffer_to_strings_array(str_ptrs_arr.array, buffer, (size_t) file_size + 2);
 
     FILE *fp_out = safe_fopen(filename_out, "wb");
 
-    merge_sort_strings(strings_ptrs_array, strings_count, MAX_STR_LEN, comparator_strings_increase);
-    print_string_array_with_message_to_file(fp_out, strings_ptrs_array, strings_count, NULL);
+    merge_sort_strings(str_ptrs_arr, MAX_STR_LEN, comparator_strings_increase);
+    print_string_array_with_message_to_file(fp_out, str_ptrs_arr, NULL);
     print_divisor_to_file(fp_out);
 
-    qsort(strings_ptrs_array, strings_count, sizeof(char *), comparator_strings_rhythm);
-    print_string_array_with_message_to_file(fp_out, strings_ptrs_array, strings_count, NULL);
+    qsort(str_ptrs_arr.array, str_ptrs_arr.len, sizeof(char *), comparator_strings_rhythm);
+    print_string_array_with_message_to_file(fp_out, str_ptrs_arr, NULL);
     print_divisor_to_file(fp_out);
 
     fprintf(fp_out, "%s", buffer + 1);
@@ -53,7 +54,7 @@ int main(int argc, char *argv[]) {
     fclose(fp_out);
 
     free(buffer);
-    free(strings_ptrs_array);
+    destruct_struct_strings_arr(str_ptrs_arr);
 
     return 0;
 }

@@ -2,71 +2,81 @@
 #include "../headers/sorting.hpp"
 
 
-char** merge_sort_strings(char **array, size_t arr_len, size_t max_str_len, int (*comparator_func)(const void *a, const void *b)) {
+struct string_ptr_array_structure merge_sort_strings(struct string_ptr_array_structure str_ptrs_arr,
+                                                     size_t max_str_len, 
+                                                     int (*comparator_func)(const void *a, const void *b)) {
 
-    assert(array != NULL);
+    assert(str_ptrs_arr.array != NULL);
     assert(comparator_func != NULL);
 //TODO: где ассерты лол? причем не только здесь
-    if (arr_len <= 1)
-        return array;
+    if (str_ptrs_arr.len <= 1)
+        return str_ptrs_arr;
 
-    size_t left_len = arr_len / 2 + arr_len % 2;
-    size_t right_len = arr_len / 2;
+    size_t left_len = str_ptrs_arr.len / 2 + str_ptrs_arr.len % 2;
+    size_t right_len = str_ptrs_arr.len / 2;
 
-    char **left  = (char**) safe_calloc(left_len, sizeof(char*)); //TODO: что если каллок не найдет места?? -- done with wrapper
-    char **right = (char**) safe_calloc(right_len, sizeof(char*));
+    struct string_ptr_array_structure left = {.len = left_len};
+    struct string_ptr_array_structure right = {.len = right_len};
 
-    merge_sort_strings_splitting_in_half(array, left, right, left_len, right_len);
+    left.array  = (char**) safe_calloc(left.len, sizeof(char*)); //TODO: что если каллок не найдет места?? -- done with wrapper
+    right.array = (char**) safe_calloc(right.len, sizeof(char*));
 
-    merge_sort_strings(left, left_len, max_str_len, comparator_func);
-    merge_sort_strings(right, right_len, max_str_len, comparator_func);
+    merge_sort_strings_splitting_in_half(str_ptrs_arr, left, right);
 
-    merge_sort_strings_merging(array, left, right, left_len, right_len, comparator_func);
+    merge_sort_strings(left, max_str_len, comparator_func);
+    merge_sort_strings(right, max_str_len, comparator_func);
 
-    free(left);
-    free(right);
+    merge_sort_strings_merging(str_ptrs_arr, left, right, comparator_func);
 
-    return array;
+    destruct_struct_strings_arr(left);
+    destruct_struct_strings_arr(right);
+
+    return str_ptrs_arr;
 }
 
 
-void merge_sort_strings_splitting_in_half(char **array, char **left, char **right, size_t left_len, size_t right_len) {
+void merge_sort_strings_splitting_in_half(  struct string_ptr_array_structure str_ptrs_arr,
+                                            struct string_ptr_array_structure left,
+                                            struct string_ptr_array_structure right) {
 
-    assert(array != NULL);
-    assert(right != NULL);
-    assert(left  != NULL);
+    assert(str_ptrs_arr.array != NULL);
+    assert(right.array != NULL);
+    assert(left.array  != NULL);
 
-    for (size_t i = 0; i < left_len; ++i) {
-        left[i] = array[i];
+    for (size_t i = 0; i < left.len; ++i) {
+        left.array[i] = str_ptrs_arr.array[i];
     }
 
-    for (size_t i = 0; i < right_len; ++i) {
-        right[i] = array[i + left_len];
+    for (size_t i = 0; i < right.len; ++i) {
+        right.array[i] = str_ptrs_arr.array[i + left.len];
     }
 }
 
 
-void merge_sort_strings_merging(char **array, char **left, char **right, size_t left_len, size_t right_len, int (*comparator_func)(const void *a, const void *b)) {
+void merge_sort_strings_merging(struct string_ptr_array_structure str_ptrs_arr,
+                                struct string_ptr_array_structure left,
+                                struct string_ptr_array_structure right,
+                                int (*comparator_func)(const void *a, const void *b)) {
 
-    assert(array != NULL);
-    assert(left != NULL);
-    assert(right != NULL);
+    assert(str_ptrs_arr.array != NULL);
+    assert(left.array != NULL);
+    assert(right.array != NULL);
     assert(comparator_func != NULL);
 
     size_t left_idx = 0, right_idx = 0;
 
-    for (size_t i = 0; i < left_len + right_len; ++i) {
+    for (size_t i = 0; i < left.len + right.len; ++i) {
         bool left_is_bigger = 0;
 
-        if (left_idx >= left_len)
+        if (left_idx >= left.len)
             left_is_bigger = 0;
 
-        else if (right_idx >= right_len)
+        else if (right_idx >= right.len)
             left_is_bigger = 1;
 
         else
-            left_is_bigger = (*comparator_func)(&left[left_idx], &right[right_idx]) > 0 ? 0 : 1;
+            left_is_bigger = (*comparator_func)(&left.array[left_idx], &right.array[right_idx]) > 0 ? 0 : 1;
 
-        array[i] = left_is_bigger ? left[left_idx++] : right[right_idx++];
+        str_ptrs_arr.array[i] = left_is_bigger ? left.array[left_idx++] : right.array[right_idx++];
     }
 }

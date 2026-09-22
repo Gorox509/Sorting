@@ -2,12 +2,17 @@
 
 #define SORTING_H
 
-char** merge_sort_strings                       (char **array, size_t arr_len,  size_t max_str_len,
-                                                    int (*comparator_func)(const void *a, const void *b));
+struct string_ptr_array_structure merge_sort_strings(struct string_ptr_array_structure str_ptrs_arr,
+                                                     size_t max_str_len,
+                                                     int (*comparator_func)(const void *a, const void *b));
 
-void merge_sort_strings_splitting_in_half       (char **array, char **left, char **right, size_t left_len, size_t right_len); //TODO: сделай стуктуру {массив, размер} -- сразу меньше аргументов
+void merge_sort_strings_splitting_in_half(  struct string_ptr_array_structure str_ptrs_arr,
+                                            struct string_ptr_array_structure left,
+                                            struct string_ptr_array_structure right);
 
-void merge_sort_strings_merging                 (char **array, char **left, char **right, size_t left_len, size_t right_len,
-                                                    int (*comparator_func)(const void *a, const void *b));
+void merge_sort_strings_merging(struct string_ptr_array_structure str_ptrs_arr,
+                                struct string_ptr_array_structure left,
+                                struct string_ptr_array_structure right,
+                                int (*comparator_func)(const void *a, const void *b));
 
 #endif

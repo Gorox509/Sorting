@@ -29,3 +29,8 @@ void safe_stat(const char *filename, struct stat *text_stat) {
         abort();
     }
 }
+
+
+void destruct_struct_strings_arr(struct string_ptr_array_structure str_ptrs_arr) {
+    free(str_ptrs_arr.array);
+}
