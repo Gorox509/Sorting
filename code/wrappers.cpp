@@ -17,7 +17,7 @@ FILE *safe_fopen(const char *_filename, const char *_mode) {
 
     if (fp == NULL) {
         fprintf(stderr, "Error while opening file");
-        abort();
+        exit(1);
     }
     return fp;
 }
@@ -26,7 +26,7 @@ FILE *safe_fopen(const char *_filename, const char *_mode) {
 void safe_stat(const char *filename, struct stat *text_stat) {
     if (stat(filename, text_stat) == -1) {
         fprintf(stderr, "Error while reading file stats");
-        abort();
+        exit(1);
     }
 }
 

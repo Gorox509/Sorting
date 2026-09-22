@@ -2,13 +2,13 @@
 #include "../headers/comparators.hpp"
 
 
-int comparator_strings_increase(const void *str1_vp, const void *str2_vp) { //TODO: это тоже можно 1 функцией сделать - done
+int comparator_strings_increase(const void *const str1_vp, const void *const str2_vp) { //TODO: это тоже можно 1 функцией сделать - done
 
     assert(str1_vp != NULL);
     assert(str2_vp != NULL);
 
-    const char *str1 = *((const char **) str1_vp);
-    const char *str2 = *((const char **) str2_vp);
+    const char *const str1 = *((const char *const *) str1_vp);
+    const char *const str2 = *((const char *const *) str2_vp);
 
     size_t idx1 = 0, idx2 = 0;
 
@@ -16,7 +16,7 @@ int comparator_strings_increase(const void *str1_vp, const void *str2_vp) { //TO
 }
 
 
-int comparator_strings_decrease(const void *str1_vp, const void *str2_vp) {
+int comparator_strings_decrease(const void *const str1_vp, const void *const str2_vp) {
 
     assert(str1_vp != NULL);
     assert(str2_vp != NULL);
@@ -25,13 +25,13 @@ int comparator_strings_decrease(const void *str1_vp, const void *str2_vp) {
 }
 
 
-int comparator_strings_rhythm(const void *str1_vp, const void *str2_vp) {
+int comparator_strings_rhythm(const void *const str1_vp, const void *const str2_vp) {
 
     assert(str1_vp != NULL);
     assert(str2_vp != NULL);
 
-    const char *str1 = *((const char **) str1_vp);
-    const char *str2 = *((const char **) str2_vp);
+    const char *const str1 = *((char *const *) str1_vp);
+    const char *const str2 = *((char *const *) str2_vp);
 
     ssize_t idx1 = 0, idx2 = 0;
 
@@ -45,7 +45,7 @@ int comparator_strings_rhythm(const void *str1_vp, const void *str2_vp) {
 }
 
 
-int compare_strings_for_onegin(const char *str1, const char *str2, ssize_t idx1, ssize_t idx2, ssize_t (*applied_func)(ssize_t)) {
+int compare_strings_for_onegin(const char *const str1, const char *const str2, ssize_t idx1, ssize_t idx2, ssize_t (*applied_func)(ssize_t)) {
 
     assert(str1 != NULL);
     assert(str2 != NULL);

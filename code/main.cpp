@@ -49,12 +49,12 @@ int main(int argc, char *argv[]) {
     print_string_array_with_message_to_file(fp_out, str_ptrs_arr, NULL);
     print_divisor_to_file(fp_out);
 
-    fprintf(fp_out, "%s", buffer + 1);
+    fprintf(fp_out, "%s", buffer + 1); // TODO: \0-proof print
 
     fclose(fp_out);
 
-    free(buffer);
     destruct_struct_strings_arr(str_ptrs_arr);
+    free(buffer);
 
     return 0;
 }
