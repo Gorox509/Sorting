@@ -30,10 +30,9 @@ int main(int argc, char *argv[]) {
 
     char *buffer = (char*) safe_calloc((size_t) file_size + 2, sizeof(char)); // +2 for \0 at the start and the end
     buffer[0] = '\0';
-    ++buffer;
 
     FILE *fp = safe_fopen(filename, "rb"); //TODO: check null - done
-    strings_count = read_lines_from_file_to_buffer(fp, buffer, optimal_block_size); //TODO: temp buf?? - done
+    strings_count = read_lines_from_file_to_buffer(fp, buffer + 1, optimal_block_size); //TODO: temp buf?? - done
     fclose(fp);
 
     char **strings_ptrs_array = (char**) safe_calloc(strings_count, sizeof(char*));
@@ -49,11 +48,11 @@ int main(int argc, char *argv[]) {
     print_string_array_with_message_to_file(fp_out, strings_ptrs_array, strings_count, NULL);
     print_divisor_to_file(fp_out);
 
-    fprintf(fp_out, "%s", buffer);
+    fprintf(fp_out, "%s", buffer + 1);
 
     fclose(fp_out);
 
-    free(buffer - 1);
+    free(buffer);
     free(strings_ptrs_array);
 
     return 0;

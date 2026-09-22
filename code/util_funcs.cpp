@@ -98,7 +98,6 @@ size_t assign_ptrs_from_buffer_to_strings_array(char **strings_ptrs_array, char 
 
     size_t idx_array = 0;
 
-    strings_ptrs_array[idx_array++] = buffer;
     for (size_t i = 0; i < buf_size - 1; ++i) {
         if (buffer[i] == '\n' || buffer[i] == '\0') {
             strings_ptrs_array[idx_array++] = buffer + i + 1;
