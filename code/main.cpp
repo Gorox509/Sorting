@@ -8,13 +8,17 @@
 #include "sorting.cpp"
 #include "comparators.cpp"
 #include "wrappers.cpp"
-#include <cstdlib>
 
 
 
-int main() {
+int main(int argc, char *argv[]) {
+
+    if (argc != 2) {
+        fprintf(stderr, "Error: wrong arguments");
+    }
+
     size_t strings_count = 0;
-    char filename[] = "onegin.txt";
+    char *filename = argv[1];
 
     struct stat text_stat = {};
     safe_stat(filename, &text_stat); //TODO: function - done
@@ -36,7 +40,7 @@ int main() {
     print_string_array_with_message_to_file(fp_out, strings_ptrs_array, strings_count, NULL);
     print_divisor_to_file(fp_out);
 
-    qsort(strings_ptrs_array, strings_count, sizeof(char *), comparator_strings_rhythm); // TODO: to qsort
+    qsort(strings_ptrs_array, strings_count, sizeof(char *), comparator_strings_rhythm);
     print_string_array_with_message_to_file(fp_out, strings_ptrs_array, strings_count, NULL);
     print_divisor_to_file(fp_out);
 
