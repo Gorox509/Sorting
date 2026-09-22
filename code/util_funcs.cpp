@@ -44,11 +44,16 @@ void print_string_array_with_message_to_file(FILE *fp, char **array, size_t arr_
 
 void print_string_before_newline(FILE *fp, const char *str) {
     size_t idx = 0;
+    bool only_spaces = 1;
 
-    while (str[idx] != '\n' && str[idx] != '\0')
+    while (str[idx] != '\n' && str[idx] != '\0') {
+        if (only_spaces && !isspace(str[idx]))
+            only_spaces = 0;
         ++idx;
+    }
 
-    fwrite(str, sizeof(char), idx, fp);
+    if (!only_spaces)
+        fwrite(str, sizeof(char), idx, fp);
 }
 
 
