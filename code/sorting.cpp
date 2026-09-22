@@ -65,7 +65,7 @@ void merge_sort_strings_merging(char **array, char **left, char **right, size_t 
             left_is_bigger = 1;
 
         else
-            left_is_bigger = (*comparator_func)(left[left_idx], right[right_idx]) > 0 ? 0 : 1;
+            left_is_bigger = (*comparator_func)(&left[left_idx], &right[right_idx]) > 0 ? 0 : 1;
 
         array[i] = left_is_bigger ? left[left_idx++] : right[right_idx++];
     }

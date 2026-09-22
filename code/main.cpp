@@ -13,7 +13,6 @@
 
 
 int main() {
-    // я хз как main разбивать по функциям, такое ощущение что все строчки кода про разное
     size_t strings_count = 0;
     char filename[] = "onegin.txt";
 
@@ -25,27 +24,23 @@ int main() {
     char *buffer = (char*) safe_calloc((size_t) file_size + 1, sizeof(char)); // +1 for \0 at the end
 
     FILE *fp = safe_fopen(filename, "rb"); //TODO: check null - done
-
     strings_count = read_lines_from_file_to_buffer(fp, buffer, optimal_block_size); //TODO: temp buf?? - done
-
-    char **strings_ptrs_array = (char**) safe_calloc(strings_count, sizeof(char*));
-
     fclose(fp);
 
+    char **strings_ptrs_array = (char**) safe_calloc(strings_count, sizeof(char*));
     assign_ptrs_from_buffer_to_strings_array(strings_ptrs_array, buffer, (size_t) file_size + 1);
 
     FILE *fp_out = safe_fopen("output.txt", "wb");
 
-    merge_sort_strings(strings_ptrs_array, strings_count, MAX_STR_LEN, (int (*)(const void*, const void*))compare_strings_increasingly);
+    merge_sort_strings(strings_ptrs_array, strings_count, MAX_STR_LEN, comparator_strings_increase);
     print_string_array_with_message_to_file(fp_out, strings_ptrs_array, strings_count, NULL);
     print_divisor_to_file(fp_out);
 
-    merge_sort_strings(strings_ptrs_array, strings_count, MAX_STR_LEN, (int (*)(const void*, const void*))compare_strings_from_end); // TODO: to qsort
+    qsort(strings_ptrs_array, strings_count, sizeof(char *), comparator_strings_rhythm); // TODO: to qsort
     print_string_array_with_message_to_file(fp_out, strings_ptrs_array, strings_count, NULL);
     print_divisor_to_file(fp_out);
 
     fprintf(fp_out, "%s", buffer);
-
 
     fclose(fp_out);
 

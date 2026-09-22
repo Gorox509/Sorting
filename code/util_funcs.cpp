@@ -1,4 +1,5 @@
 #include "../headers/definitions.hpp"
+#include <cstdio>
 #include "../headers/util_funcs.hpp"
 
 
@@ -60,17 +61,17 @@ void print_divisor_to_file(FILE *fp) {
 }
 
 
-size_t read_lines_from_file_to_buffer(FILE *fp, char *buffer, __blksize_t bulk_size) {
+size_t read_lines_from_file_to_buffer(FILE *fp, char *buffer, __blksize_t block_size) {
 
     assert(fp != NULL);
     assert(buffer != NULL);
-    assert(bulk_size != 0);
+    assert(block_size != 0);
 
     size_t n_read = 0;
     size_t n_lines = 0;
 
     while (!feof(fp)) {
-        size_t n_fread = fread(buffer + n_read, sizeof(char), (size_t) bulk_size, fp);
+        size_t n_fread = fread(buffer + n_read, sizeof(char), (size_t) block_size, fp);
 
         for (size_t i = 0; i < n_fread; ++i) {
             if (buffer[n_read + i] == '\n' || buffer[n_read + i] == '\0') {
@@ -103,12 +104,11 @@ size_t assign_ptrs_from_buffer_to_strings_array(char **strings_ptrs_array, char 
 }
 
 
-void destruct_array_of_strings(char **array, size_t strings_count) {
+ssize_t decrement(ssize_t x) {
+    return --x;
+}
 
-    assert(array != NULL);
 
-    for (size_t i = 0; i < strings_count; ++i)
-        free(array[i]);
-
-    free(array);
+ssize_t increment(ssize_t x) {
+    return ++x;
 }
