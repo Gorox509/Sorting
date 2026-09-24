@@ -26,7 +26,7 @@ void clear_input() {
 }
 
 
-void print_string_array_with_message_to_file(FILE *fp, struct string_ptr_array_structure str_ptrs_arr, const char *msg_str) {
+void print_string_array_with_message_to_file(FILE *fp, const struct string_ptr_array_structure str_ptrs_arr, const char *const msg_str) {
 
     assert(fp != NULL);
     assert(str_ptrs_arr.array != NULL);
@@ -65,7 +65,7 @@ void print_divisor_to_file(FILE *fp) {
 }
 
 
-size_t read_lines_from_file_to_buffer(FILE *fp, char *buffer, __blksize_t block_size) {
+size_t read_lines_from_file_to_buffer(FILE *fp, char *buffer, const __blksize_t block_size) {
 
     assert(fp != NULL);
     assert(buffer != NULL);
@@ -91,7 +91,7 @@ size_t read_lines_from_file_to_buffer(FILE *fp, char *buffer, __blksize_t block_
 }
 
 
-size_t assign_ptrs_from_buffer_to_strings_array(char **strings_ptrs_array, char *buffer, size_t buf_size) {
+size_t assign_ptrs_from_buffer_to_strings_array(char **strings_ptrs_array, char *buffer, const size_t buf_size) {
 
     assert(strings_ptrs_array != NULL);
     assert(buffer != NULL);

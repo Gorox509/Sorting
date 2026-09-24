@@ -24,14 +24,17 @@ int main(int argc, char *argv[]) {
     char *filename_out = argv[2];
 
     struct stat text_stat = {};
-    safe_stat(filename, &text_stat); //TODO: function - done
+    if (safe_stat(filename, &text_stat) == -1) //TODO: function - done
+        exit(1);
     __off_t file_size = text_stat.st_size;
     __blksize_t optimal_block_size = text_stat.st_blksize;
 
     char *buffer = (char*) safe_calloc((size_t) file_size + 2, sizeof(char)); // +2 for \0 at the start and the end
     buffer[0] = '\0';
 
-    FILE *fp = safe_fopen(filename, "rb"); //TODO: check null - done
+    FILE *fp = safe_fopen(filename, "rb"); //TODO: check null - donei
+    if (fp == NULL)
+        exit(1);
     strings_count = read_lines_from_file_to_buffer(fp, buffer + 1, optimal_block_size); //TODO: temp buf?? - done
     fclose(fp);
 
@@ -41,7 +44,7 @@ int main(int argc, char *argv[]) {
 
     FILE *fp_out = safe_fopen(filename_out, "wb");
 
-    merge_sort_strings(str_ptrs_arr, MAX_STR_LEN, comparator_strings_increase);
+    merge_sort_strings(&str_ptrs_arr, MAX_STR_LEN, comparator_strings_increase);
     print_string_array_with_message_to_file(fp_out, str_ptrs_arr, NULL);
     print_divisor_to_file(fp_out);
 

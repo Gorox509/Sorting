@@ -1,12 +1,12 @@
 #include "../headers/definitions.hpp"
 #include "../headers/wrappers.hpp"
 
-void *safe_calloc(size_t _nmemb, size_t _size) {
+void *safe_calloc(const size_t _nmemb, const size_t _size) {
     void *ptr = calloc(_nmemb, _size);
 
     if (ptr == NULL) {
         fprintf(stderr, "Error while allocating");
-        abort();
+        exit(1);
     }
     return ptr;
 }
@@ -17,17 +17,18 @@ FILE *safe_fopen(const char *_filename, const char *_mode) {
 
     if (fp == NULL) {
         fprintf(stderr, "Error while opening file");
-        exit(1);
+        return NULL;
     }
     return fp;
 }
 
 
-void safe_stat(const char *filename, struct stat *text_stat) {
+int safe_stat(const char *filename, struct stat *text_stat) {
     if (stat(filename, text_stat) == -1) {
         fprintf(stderr, "Error while reading file stats");
-        exit(1);
+        return -1;
     }
+    return 0;
 }
 
 

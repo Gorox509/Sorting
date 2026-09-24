@@ -45,7 +45,7 @@ int comparator_strings_rhythm(const void *const str1_vp, const void *const str2_
 }
 
 
-int compare_strings_for_onegin(const char *const str1, const char *const str2, ssize_t idx1, ssize_t idx2, ssize_t (*applied_func)(ssize_t)) {
+int compare_strings_for_onegin(const char *const str1, const char *const str2, ssize_t idx1, ssize_t idx2, ssize_t (*const applied_func)(ssize_t)) {
 
     assert(str1 != NULL);
     assert(str2 != NULL);
@@ -55,26 +55,34 @@ int compare_strings_for_onegin(const char *const str1, const char *const str2, s
         && str1[idx1] != '\0' && str2[idx2] != '\0'
         && idx1 >= 0 && idx2 >= 0)
     {
-        bool wrong_symbol_1 = 0;
-        bool wrong_symbol_2 = 0;
-
-        if (!isalpha(str1[idx1]))
-            wrong_symbol_1 = 1;
-        if (!isalpha(str2[idx2]))
-            wrong_symbol_2 = 1;
-
-        if (wrong_symbol_1)
-            idx1 = (*applied_func)(idx1);
-        if (wrong_symbol_2)
-            idx2 = (*applied_func)(idx2);
-        if (wrong_symbol_1 || wrong_symbol_2)
-            continue;
-
-        if (tolower(str1[idx1]) != tolower(str2[idx2]))
+        if (compare_letters_or_skip_character(str1[idx1], str2[idx2], &idx1, &idx2, applied_func) == 1)
             break;
-
-        idx1 = (*applied_func)(idx1);
-        idx2 = (*applied_func)(idx2);
     }
     return tolower(str1[idx1]) - tolower(str2[idx2]);
+}
+
+
+int compare_letters_or_skip_character(const char ch1, const char ch2, ssize_t *const idx1, ssize_t *const idx2, ssize_t (*const applied_func)(ssize_t)) {
+    bool wrong_symbol_1 = 0;
+    bool wrong_symbol_2 = 0;
+
+    if (!isalpha(ch1))
+        wrong_symbol_1 = 1;
+    if (!isalpha(ch2))
+        wrong_symbol_2 = 1;
+
+    if (wrong_symbol_1)
+        *idx1 = (*applied_func)(*idx1);
+    if (wrong_symbol_2)
+        *idx2 = (*applied_func)(*idx2);
+    if (wrong_symbol_1 || wrong_symbol_2)
+        return 0;
+
+    if (tolower(ch1) != tolower(ch2))
+        return 1;
+
+    *idx1 = (*applied_func)(*idx1);
+    *idx2 = (*applied_func)(*idx2);
+
+    return 0;
 }
